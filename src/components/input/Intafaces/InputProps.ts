@@ -6,4 +6,6 @@ export default interface InputTextProps {
     placeholder?: string;
     value?: string;
     id?: string;
+    type?: string;
+    autoComplete?: string;
 }
