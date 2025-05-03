@@ -1,3 +1,5 @@
+import {JwtPayload} from "jwt-decode";
+
 export class Users {
     name?: string;
     email?: string;
@@ -18,4 +20,8 @@ export class UserSessionToken {
     email?: string;
     accessToken?: string;
     expiration?: number;
+}
+
+export interface ExtendedJwtPayload extends JwtPayload {
+    name?: string;
 }

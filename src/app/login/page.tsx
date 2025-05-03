@@ -7,11 +7,12 @@ import Template from "@/components/template/Template";
 import InputText from "@/components/input/InputText";
 import Button from "@/components/button/Button";
 import CredentialsFormLogin from "@/app/login/_interface/CredentialsForm";
-import validationSchema, {formSchema} from "@/app/login/_util/formSheme";
+
 import FilderError from "@/components/input/util/filderError";
 import {useAuth} from "@/resources/users/authentication.resourse";
 import {AcessToken, Users} from "@/resources/users/users.resouces";
 import useNotification from "@/components/notification/notification";
+import {loginFormSchema, loginSchema, registerFormSchema, registerSchema} from "@/app/login/_util/formSheme";
 
 function Login() {
     const [loading, setLoading] = useState<boolean>(false);
@@ -22,28 +23,32 @@ function Login() {
     const router = useRouter();
 
     const { values, handleChange, handleSubmit, errors, resetForm } = useFormik<CredentialsFormLogin>({
-        initialValues: formSchema,
-        validationSchema: validationSchema,
+        initialValues: newUserState ? registerFormSchema : loginFormSchema,
+        validationSchema: newUserState ? registerSchema : loginSchema,
+        enableReinitialize: true,
         onSubmit: onSubmit,
     })
 
     async function onSubmit(values: CredentialsFormLogin) {
-        console.log(!newUserState);
         if(!newUserState) {
+            setLoading(true)
             const credentials: CredentialsFormLogin = {
                 email: values.email,
                 password: values.password
             }
             try{
                 const accessToken: AcessToken = await auth.authenticate(credentials)
-                console.log(accessToken)
+                auth.initSession(accessToken);
                 router.push("/galeria")
             }catch(error){
                 const err = error as Error;
                 const message = err.message;
                 notification.notify(message, "error")
+            } finally {
+                setLoading(false)
             }
         } else {
+            setLoading(true)
             const user: Users = {email: values.email, name: values.name, password: values.password};
             try {
                 await auth.save(user);
@@ -54,6 +59,8 @@ function Login() {
                 const err = error as Error;
                 const message = err.message;
                 notification.notify(message, "error")
+            }finally {
+                setLoading(false)
             }
         }
     }

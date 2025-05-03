@@ -1,7 +1,7 @@
 import ImageResource from "@/resources/image/image.resource";
 
 class ImageServices {
-    baseUrl: string = "http://192.168.1.6:8089/v1/images";
+    baseUrl: string = "http://192.168.1.2:8089/v1/images";
 
     async Search(query: string, extension: string) : Promise<ImageResource[]>{
         const url = `${this.baseUrl}?Query=${query}&Extension=${extension}`;
