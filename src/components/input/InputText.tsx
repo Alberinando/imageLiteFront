@@ -10,7 +10,8 @@ const InputText:React.FC<InputTextProps> = ({style, onChange, placeholder,id, va
             onChange={onChange}
             value={value}
             autoComplete={autoComplete}
-            className={`${style} border px-5 py-2 rounded-lg text-gray-900`} />
+            className={`${style} w-full border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:outline-none px-5 py-3 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200`}
+        />
     )
 }
 

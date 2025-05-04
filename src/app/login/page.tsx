@@ -66,39 +66,35 @@ function Login() {
     }
 
     return (
-        <Template loading={loading}>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="select-none mt-1 text-center text-1x1 font-bold leading-9 tracking-tight text-gray-900">
-                        {newUserState ? "Criar novo usuário" : "Faça login na sua conta"}
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-indigo-100 px-4">
+                <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl p-10">
+                    <h2 className="select-none text-3xl font-extrabold text-center text-blue-700 mb-8">
+                        {newUserState ? "Crie sua conta" : "Bem-vindo de volta!"}
                     </h2>
-                </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-2" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         {newUserState && (
-                            <>
-                                <div>
-                                    <label className="select-none block text-sm font-semibold font-medium leading-6 text-gray-900">Name: </label>
-                                </div>
-                                <div className="mt-2">
-                                    <InputText
-                                        style= "w-full"
-                                        id="name"
-                                        type="text"
-                                        value={values.name}
-                                        onChange={handleChange}
-                                    />
-                                    <FilderError error={errors.name} />
-                                </div>
-                            </>
+                            <div>
+                                <label htmlFor="name" className="select-none block text-sm font-medium text-gray-600 mb-1">
+                                    Nome
+                                </label>
+                                <InputText
+                                    style="w-full"
+                                    id="name"
+                                    type="text"
+                                    value={values.name}
+                                    onChange={handleChange}
+                                />
+                                <FilderError error={errors.name} />
+                            </div>
                         )}
+
                         <div>
-                            <label className="select-none block text-sm font-semibold font-medium leading-6 text-gray-900">E-mail: </label>
-                        </div>
-                        <div className="mt-2">
+                            <label htmlFor="email" className="select-none block text-sm font-medium text-gray-600 mb-1">
+                                E‑mail
+                            </label>
                             <InputText
-                                style= "w-full"
+                                style="w-full"
                                 id="email"
                                 type="email"
                                 value={values.email}
@@ -107,12 +103,13 @@ function Login() {
                             />
                             <FilderError error={errors.email} />
                         </div>
+
                         <div>
-                            <label className="select-none block text-sm font-semibold font-medium leading-6 text-gray-900">Senha: </label>
-                        </div>
-                        <div className="mt-2">
+                            <label htmlFor="password" className="select-none block text-sm font-medium text-gray-600 mb-1">
+                                Senha
+                            </label>
                             <InputText
-                                style= "w-full"
+                                style="w-full"
                                 id="password"
                                 type="password"
                                 value={values.password}
@@ -121,54 +118,59 @@ function Login() {
                             />
                             <FilderError error={errors.password} />
                         </div>
+
                         {newUserState && (
-                            <>
-                                <div>
-                                    <label className="select-none block text-sm font-semibold font-medium leading-6 text-gray-900">Repita a senha: </label>
-                                </div>
-                                <div className="mt-2">
-                                    <InputText
-                                        style= "w-full"
-                                        id="passwordMatch"
-                                        type="password"
-                                        value={values.passwordMatch}
-                                        onChange={handleChange}
-                                        autoComplete="current-password"
-                                    />
-                                    <FilderError error={errors.passwordMatch} />
-                                </div>
-                            </>
+                            <div>
+                                <label htmlFor="passwordMatch" className="select-none block text-sm font-medium text-gray-600 mb-1">
+                                    Confirmar senha
+                                </label>
+                                <InputText
+                                    style="w-full"
+                                    id="passwordMatch"
+                                    type="password"
+                                    value={values.passwordMatch}
+                                    onChange={handleChange}
+                                    autoComplete="new-password"
+                                />
+                                <FilderError error={errors.passwordMatch} />
+                            </div>
                         )}
 
-                        <div>
-                            {newUserState && (
+                        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                            {newUserState ? (
                                 <>
                                     <Button
                                         type="submit"
-                                        color="bg-indigo-700 hover:bg-indigo-500 select-none"
                                         label="Salvar"
-                                        textColor="white" />
+                                        color="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-200"
+                                        textColor="white"
+                                    />
                                     <Button
                                         type="button"
-                                        color="bg-red-700 hover:bg-red-500 mx-2 select-none"
                                         label="Cancelar"
-                                        textColor="white"
-                                        onClick={() => setUserSate(false)} />
+                                        color="bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100"
+                                        textColor="black"
+                                        onClick={() => {
+                                            setUserSate(false);
+                                        }}
+                                    />
                                 </>
-                            )}
-                            {!newUserState && (
+                            ) : (
                                 <>
                                     <Button
                                         type="submit"
-                                        color="bg-indigo-700 hover:bg-indigo-500 select-none"
                                         label="Entrar"
-                                        textColor="white" />
+                                        color="bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200"
+                                        textColor="white"
+                                    />
                                     <Button
                                         type="button"
-                                        color="bg-red-700 hover:bg-red-500 mx-2 select-none"
-                                        label="Cadastra-se"
-                                        textColor="white"
-                                        onClick={() => setUserSate(true)}
+                                        label="Cadastrar-se"
+                                        color="bg-indigo-100 hover:bg-indigo-200 focus:ring-4 focus:ring-indigo-100"
+                                        textColor="black"
+                                        onClick={() => {
+                                            setUserSate(true);
+                                        }}
                                     />
                                 </>
                             )}
@@ -176,7 +178,6 @@ function Login() {
                     </form>
                 </div>
             </div>
-        </Template>
     )
 }
 

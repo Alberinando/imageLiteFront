@@ -6,7 +6,7 @@ import NoopStorage from "@/resources/users/interfaces/noop.storage";
 
 class AuthService {
     private storage: StorageLike;
-    baseURL: string = "http://192.168.1.2:8089/v1/user";
+    baseURL: string = "http://192.168.1.6:8089/v1/user";
     static AUTH_PARAMS: string = "_auth";
 
     constructor() {
@@ -89,6 +89,10 @@ class AuthService {
             return new Date() < new Date(expirationDate);
         }
         return false;
+    }
+
+    invalidateSession(): void {
+        localStorage.removeItem(AuthService.AUTH_PARAMS);
     }
 }
 

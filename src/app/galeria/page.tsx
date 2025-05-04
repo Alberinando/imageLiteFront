@@ -49,14 +49,23 @@ function GaleriaPage(){
     return (
         <AuthenticatedPage>
             <Template loading={loading}>
-                <section className="flex flex-col items-center justify-center my-5">
-                    <div className={`flex flex-col sm:flex-row ${loading && "animate-pulse"} space-x-4 space-y-4 sm:space-y-0 max-md:w-full max-md:px-2`}>
+                {/* Search Section */}
+                <section className="w-full max-w-4xl mx-auto my-8">
+                    <div
+                        className={
+                            `flex flex-col sm:flex-row items-center bg-white shadow-md rounded-2xl p-6 space-y-4 sm:space-y-0 sm:space-x-4 ` +
+                            (loading ? 'animate-pulse' : '')
+                        }
+                    >
                         <InputText
-                            placeholder="Digite o nome ou tag"
-                            onChange={(e) => setQuery(e.target.value)} />
+                            placeholder="Buscar por nome ou tag"
+                            onChange={(e) => setQuery(e.target.value)}
+                            style="flex-grow"
+                        />
                         <select
                             onChange={(e) => setExtension(e.target.value)}
-                            className="border px-4 py-2 rounded-lg  cursor-pointer text-gray-900 z-auto">
+                            className="w-48 border-gray-300 border-2 rounded-lg px-4 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition cursor-pointer"
+                        >
                             <option value="">Todos os formatos</option>
                             <option value="png">PNG</option>
                             <option value="jpeg">JPEG</option>
@@ -66,25 +75,35 @@ function GaleriaPage(){
                             <option value="webp">WEBP</option>
                         </select>
 
-                        <Button color="bg-blue-500 hover:bg-blue-300" textColor="white" onClick={searchImages} label="Buscar" />
+                        <Button
+                            onClick={searchImages}
+                            label="Buscar"
+                            color="bg-indigo-600 hover:bg-indigo-700"
+                            textColor="white"
+                        />
                         <Link href="/formulario">
-                            <Button color="bg-yellow-500 hover:bg-yellow-300" textColor="white" label="Cadastre" />
+                            <Button
+                                label="Cadastrar"
+                                color="bg-green-500 hover:bg-green-600"
+                                textColor="white"
+                            />
                         </Link>
                     </div>
                 </section>
 
-                <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 max-md:px-2 max-md:gap-4">
-                    {images.map((image, index) => (
+                <section className="container mx-auto px-4 pb-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {images.map((image, idx) => (
                             <RenderImage
-                                key={index}
+                                key={idx}
                                 url={image.url}
                                 name={image.name}
                                 size={image.size}
                                 uploadDate={image.dataUpload}
                                 extension={image.extension}
                             />
-                        ))
-                    }
+                        ))}
+                    </div>
                 </section>
             </Template>
         </AuthenticatedPage>
