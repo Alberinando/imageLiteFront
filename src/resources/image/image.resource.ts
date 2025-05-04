@@ -4,6 +4,7 @@ export default class ImageResource {
     extension?: string;
     size?: number;
     uploadDate?: string;
+    id?: string;
 
     constructor(url: string) {
         this.url = url;

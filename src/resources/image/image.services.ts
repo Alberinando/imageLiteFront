@@ -28,6 +28,25 @@ class ImageServices {
 
         return response.headers.get('location') ?? '';
     }
+
+    async DeleteImage(id: string) : Promise<void> {
+        const userSession = this.auth.getUserSession();
+        const url = `${this.baseUrl}/${id}`;
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": `Bearer ${userSession?.accessToken}`,
+            }
+        })
+
+        if (response.status === 404) {
+            throw new Error("Imagem não encontrada!!!");
+        }
+
+        if (!response.ok) {
+            throw new Error("Erro ao excluir imagem");
+        }
+    }
 }
 
 export const useImageServices = () => new ImageServices();

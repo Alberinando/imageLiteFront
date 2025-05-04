@@ -10,12 +10,15 @@ import Button from "@/components/button/Button";
 import InputText from "@/components/input/InputText";
 import useNotification from "@/components/notification/notification";
 import AuthenticatedPage from "@/components/Authenticated/AuthenticatedPage";
+import DeleteModal from "@/components/Modal/DeleteModal";
 
 function GaleriaPage(){
     const [images, setImages] = useState<ImageCardProps[]>([]);
     const [query, setQuery] = useState<string>("");
     const [extension, setExtension] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [imageToDelete, setImageToDelete] = useState<ImageCardProps | null>(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const useServices = useImageServices();
     const notification = useNotification();
@@ -23,6 +26,37 @@ function GaleriaPage(){
     useEffect(() => {
         searchImages()
     }, []);
+
+    function handleDeleteClick(image: ImageCardProps) {
+        setImageToDelete(image);
+        setModalOpen(true);
+    }
+
+    async function confirmDelete() {
+        if (!imageToDelete?.id) return;
+        console.log("Aqui")
+
+        setLoading(true);
+        try {
+            await useServices.DeleteImage(imageToDelete.id);
+            notification.notify("Imagem excluída com sucesso!", "success");
+            await searchImages();
+        } catch (error) {
+            setLoading(true);
+            console.error("Erro ao excluir imagem, Erro: ", error);
+            notification.notify("Erro ao excluir imagem", "error");
+        } finally {
+            setModalOpen(false);
+            setImageToDelete(null);
+            setLoading(false);
+        }
+        await searchImages();
+    }
+
+    function cancelDelete() {
+        setModalOpen(false);
+        setImageToDelete(null);
+    }
 
     async function searchImages() {
         try {
@@ -34,6 +68,7 @@ function GaleriaPage(){
                 size: item.size,
                 dataUpload: item.uploadDate,
                 extension: item.extension,
+                id: item.id,
             }));
             setImages(imagesConverted);
             if(!result.length){
@@ -49,7 +84,6 @@ function GaleriaPage(){
     return (
         <AuthenticatedPage>
             <Template loading={loading}>
-                {/* Search Section */}
                 <section className="w-full max-w-4xl mx-auto my-8">
                     <div
                         className={
@@ -101,11 +135,20 @@ function GaleriaPage(){
                                 size={image.size}
                                 uploadDate={image.dataUpload}
                                 extension={image.extension}
+                                id={image.id}
+                                onDelete={() => handleDeleteClick(image)}
                             />
                         ))}
                     </div>
                 </section>
             </Template>
+            {modalOpen &&
+                <DeleteModal
+                    isOpen={modalOpen}
+                    onConfirm={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+            }
         </AuthenticatedPage>
     )
 }
