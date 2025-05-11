@@ -10,3 +10,10 @@ export default class ImageResource {
         this.url = url;
     }
 }
+
+export interface ImageEditResource {
+    id?: string;
+    name?: string;
+    tags?: string;
+    fileBase64?: string;
+}

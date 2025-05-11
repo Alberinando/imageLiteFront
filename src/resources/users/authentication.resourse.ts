@@ -6,7 +6,7 @@ import NoopStorage from "@/resources/users/interfaces/noop.storage";
 
 class AuthService {
     private storage: StorageLike;
-    baseURL: string = "http://192.168.1.6:8089/v1/user";
+    baseURL: string = "http://192.168.1.7:8089/v1/user";
     static AUTH_PARAMS: string = "_auth";
 
     constructor() {
@@ -65,15 +65,24 @@ class AuthService {
     }
 
     setUserSession(userSessionToken: UserSessionToken){
-        localStorage.setItem(AuthService.AUTH_PARAMS, JSON.stringify(userSessionToken));
+        try {
+            localStorage.setItem(AuthService.AUTH_PARAMS, JSON.stringify(userSessionToken));
+        } catch (e){
+            throw new Error("Erro: " + e)
+        }
     }
 
     getUserSession(): UserSessionToken | null {
-        const str = this.storage.getItem(AuthService.AUTH_PARAMS);
-        if (!str) return null;
         try {
-            return JSON.parse(str) as UserSessionToken;
-        } catch {
+            const str = this.storage.getItem(AuthService.AUTH_PARAMS);
+            if (!str) return null;
+            try {
+                return JSON.parse(str) as UserSessionToken;
+            } catch {
+                return null;
+            }
+        } catch (e) {
+            console.error(e);
             return null;
         }
     }
@@ -92,7 +101,11 @@ class AuthService {
     }
 
     invalidateSession(): void {
-        localStorage.removeItem(AuthService.AUTH_PARAMS);
+        try {
+            localStorage.removeItem(AuthService.AUTH_PARAMS);
+        } catch (e){
+            throw new Error("Erro: " + e)
+        }
     }
 }
 

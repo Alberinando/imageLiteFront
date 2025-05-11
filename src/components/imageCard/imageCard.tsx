@@ -3,8 +3,9 @@ import React from "react";
 import imageCardProps from "@/components/imageCard/interface/imageCardProps";
 import formatBytes from "@/util/formatBytes";
 import Button from "@/components/button/Button";
+import Link from "next/link";
 
-const imageCard= ({url, name, size, dataUpload, extension, onDelete}: imageCardProps) => {
+const imageCard= ({id, url, name, size, dataUpload, extension, onDelete}: imageCardProps) => {
 
     function download(){
         window.open(url, '_blank');
@@ -23,7 +24,14 @@ const imageCard= ({url, name, size, dataUpload, extension, onDelete}: imageCardP
                 <p className="text-sm text-gray-500 uppercase">{extension}</p>
                 <p className="text-sm text-gray-600">{formatBytes(size)}</p>
                 <p className="text-xs text-gray-400">{dataUpload}</p>
-                <div className="flex justify-end">
+                <div className="flex justify-end space-x-2">
+                    <Link href={`/galeria/${id}`}>
+                        <Button
+                            type="button"
+                            label="Editar"
+                            color="bg-yellow-500 hover:bg-yellow-300 focus:ring-4 focus:ring-yellow-100"
+                        />
+                    </Link>
                     <Button
                         type="button"
                         label="Excluir"

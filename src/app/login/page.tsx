@@ -3,7 +3,6 @@ import React, {useState} from "react";
 import { useFormik } from "formik";
 import {useRouter} from "next/navigation";
 
-import Template from "@/components/template/Template";
 import InputText from "@/components/input/InputText";
 import Button from "@/components/button/Button";
 import CredentialsFormLogin from "@/app/login/_interface/CredentialsForm";
@@ -15,7 +14,6 @@ import useNotification from "@/components/notification/notification";
 import {loginFormSchema, loginSchema, registerFormSchema, registerSchema} from "@/app/login/_util/formSheme";
 
 function Login() {
-    const [loading, setLoading] = useState<boolean>(false);
     const [newUserState, setUserSate] = useState<boolean>(false);
 
     const auth = useAuth();
@@ -31,7 +29,6 @@ function Login() {
 
     async function onSubmit(values: CredentialsFormLogin) {
         if(!newUserState) {
-            setLoading(true)
             const credentials: CredentialsFormLogin = {
                 email: values.email,
                 password: values.password
@@ -44,11 +41,8 @@ function Login() {
                 const err = error as Error;
                 const message = err.message;
                 notification.notify(message, "error")
-            } finally {
-                setLoading(false)
             }
         } else {
-            setLoading(true)
             const user: Users = {email: values.email, name: values.name, password: values.password};
             try {
                 await auth.save(user);
@@ -59,8 +53,6 @@ function Login() {
                 const err = error as Error;
                 const message = err.message;
                 notification.notify(message, "error")
-            }finally {
-                setLoading(false)
             }
         }
     }
